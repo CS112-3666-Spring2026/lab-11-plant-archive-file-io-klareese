@@ -1,35 +1,50 @@
-// TODO: Step 2 - Import file input statements here
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 
-public class Main 
+public class Main
 {
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
-		//TEST FOR STEP 1 (you can delete/comment this out after completing step 1)
 		Plant test = new Plant("Stinging Nettle,65,anti-inflammatory and culinary");
 		System.out.println("test plant:\n" + test + "\n\n");
 
+		FileInputStream fileStream = null;
+		Scanner fileScanner = null;
 
-		//TODO: Step 2 - Declare + initialize variables for file input here
+		ArrayList<Plant> plantList = new ArrayList<>();
 
-		
-		//TODO: Step 2 - Connect input stream to file (dont forget the try/catch!)
+		try {
+			fileStream = new FileInputStream("Forage.csv");
+			fileScanner = new Scanner(fileStream);
 
+			while (fileScanner.hasNextLine()) {
+				String line = fileScanner.nextLine();
 
-		//TODO: Step 2 - create loop to read through whole file
+				System.out.println("Reading: " + line);
+				try {
+					Plant plant = new Plant(line);
+					plantList.add(plant);
+				} catch (IllegalArgumentException e) {
+					System.out.println("Skipping invalid line: " + line);
+				}
+			}
+			fileScanner.close();
+			fileStream.close();
 
-
-			//TODO: Step 3 - build Plant Objects and store into ArrayList
-
-
-
-		//TODO: Step 2 - close the input stream
-
-
-		//TODO: Step 3 - print contents of ArrayList
-
+		}
+		catch (FileNotFoundException e) {
+			System.out.println("Error: File not found.");
+		}
+		catch (IOException e) {
+			System.out.println("Error reading file.");
+		}
+		System.out.println("\n--- Plant Archive ---");
+		for (Plant p : plantList) {
+			System.out.println(p);
+			System.out.println();
+		}
 	}
 }
